@@ -1,0 +1,66 @@
+
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: portfolio-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+      MONGO_INITDB_DATABASE: portfolio3d
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - portfolio-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  backend:
+    build: 
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: portfolio-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - MONGODB_URI=mongodb://admin:password123@mongodb:27017/portfolio3d?authSource=admin
+      - JWT_SECRET=your_production_jwt_secret_change_this
+      - JWT_EXPIRE=30d
+      - CLIENT_URL=http://localhost:3000
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - portfolio-network
+    volumes:
+      - ./server/uploads:/app/uploads
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: portfolio-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - portfolio-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  portfolio-network:
+    driver: bridge

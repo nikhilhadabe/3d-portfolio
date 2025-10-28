@@ -1,0 +1,22 @@
+admin token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZmZjM2FkNjgzNGFhYzA1OTM3NWMxMyIsImlhdCI6MTc2MTU5MjIzNywiZXhwIjoxNzY0MTg0MjM3fQ.ixUGPHNer-aFIyyK58BjYMD6ap2vvpqOLsFr_EGNZfw
+
+
+
+<div className="relative z-10 text-center text-white">
+        <h1 className="text-6xl md:text-8xl font-bold mb-6">
+         Welcome Everyone
+        </h1>
+        <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">
+          Hi, I’m Nikhil Sanjay Hadbe
+           A Full Stack Developer and Data Analyst passionate about building efficient, data-driven,
+           and user-focused digital solutions
+        </p>
+        <div className="flex gap-4 justify-center">
+          <button className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold transition-colors duration-300">
+            View My Work
+          </button>
+          <button className="border-2 border-white hover:bg-white hover:text-gray-900 text-white px-8 py-3 rounded-lg text-lg font-semibold transition-all duration-300">
+            Contact Me
+          </button>
+        </div>
+      </div>
