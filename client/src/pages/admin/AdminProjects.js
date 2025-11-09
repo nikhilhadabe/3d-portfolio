@@ -3,6 +3,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import axios from 'axios';
 
+const API_BASE_URL = 'https://portfolio-gci2.onrender.com/api';
+
 const AdminProjects = () => {
   const { user } = useAuth();
   const { darkMode } = useTheme();
@@ -20,7 +22,7 @@ const AdminProjects = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await axios.get('/api/projects?limit=1000');
+      const response = await axios.get(`${API_BASE_URL}/projects?limit=1000`);
       setProjects(response.data.data.projects);
     } catch (error) {
       console.error('Fetch projects error:', error);
@@ -34,7 +36,7 @@ const AdminProjects = () => {
     if (!window.confirm('Are you sure you want to delete this project?')) return;
 
     try {
-      await axios.delete(`/api/projects/${projectId}`);
+      await axios.delete(`${API_BASE_URL}/projects/${projectId}`);
       setProjects(projects.filter(project => project._id !== projectId));
     } catch (error) {
       console.error('Delete project error:', error);
@@ -51,10 +53,10 @@ const AdminProjects = () => {
     try {
       if (editingProject) {
         // Update existing project
-        await axios.put(`/api/projects/${editingProject._id}`, formData);
+        await axios.put(`${API_BASE_URL}/projects/${editingProject._id}`, formData);
       } else {
         // Create new project
-        await axios.post('/api/projects', formData);
+        await axios.post(`${API_BASE_URL}/projects`, formData);
       }
       
       setShowForm(false);
@@ -220,7 +222,6 @@ const AdminProjects = () => {
   );
 };
 
-// Project Form Component
 // ProjectForm Component - SUPER COMPACT FOR LAPTOP
 const ProjectForm = ({ project, onSubmit, onCancel, darkMode }) => {
   const [formData, setFormData] = useState({
@@ -435,7 +436,5 @@ const ProjectForm = ({ project, onSubmit, onCancel, darkMode }) => {
     </div>
   );
 };
-
-
 
 export default AdminProjects;

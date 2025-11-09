@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import axios from 'axios';
 
+const API_BASE_URL = 'https://portfolio-gci2.onrender.com/api';
+
 const Projects = () => {
   const { darkMode } = useTheme();
   const [projects, setProjects] = useState([]);
@@ -25,7 +27,7 @@ const Projects = () => {
       if (filters.category !== 'all') params.append('category', filters.category);
       params.append('page', filters.page);
 
-      const response = await axios.get(`/api/projects?${params}`);
+      const response = await axios.get(`${API_BASE_URL}/projects?${params}`);
       const { data } = response.data;
       
       setProjects(data.projects);

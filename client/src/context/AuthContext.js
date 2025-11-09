@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useAlert } from './AlertContext';
 
 const AuthContext = createContext();
+const API_BASE_URL = 'https://portfolio-gci2.onrender.com/api';
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -28,7 +29,7 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem('token');
       if (token) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        const response = await axios.get('/api/auth/profile');
+        const response = await axios.get(`${API_BASE_URL}/auth/profile`);
         setUser(response.data);
         success(`Welcome back, ${response.data.name}!`);
       }
@@ -43,7 +44,7 @@ export const AuthProvider = ({ children }) => {
   // Register user
   const register = async (userData) => {
     try {
-      const response = await axios.post('/api/auth/register', userData);
+      const response = await axios.post(`${API_BASE_URL}/auth/register`, userData);
       
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
@@ -72,7 +73,7 @@ export const AuthProvider = ({ children }) => {
       // Add delay to prevent rapid requests (1 second minimum)
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      const response = await axios.post('/api/auth/login', { email, password });
+      const response = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
       
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
@@ -115,7 +116,7 @@ export const AuthProvider = ({ children }) => {
   // Update user profile
   const updateProfile = async (userData) => {
     try {
-      const response = await axios.put('/api/auth/profile', userData);
+      const response = await axios.put(`${API_BASE_URL}/auth/profile`, userData);
       setUser(response.data);
       success('Profile updated successfully! ✅');
       return response.data;

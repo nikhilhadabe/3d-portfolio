@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import axios from 'axios';
 
+const API_BASE_URL = 'https://portfolio-gci2.onrender.com/api';
+
 const Blog = () => {
   const { darkMode } = useTheme();
   const [blogs, setBlogs] = useState([]);
@@ -28,7 +30,7 @@ const Blog = () => {
       if (filters.search) params.append('search', filters.search);
       params.append('page', filters.page);
 
-      const response = await axios.get(`/api/blogs?${params}`);
+      const response = await axios.get(`${API_BASE_URL}/blogs?${params}`);
       const { data } = response.data;
       
       setBlogs(data.blogs);

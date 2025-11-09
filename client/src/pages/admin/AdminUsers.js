@@ -3,6 +3,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import axios from 'axios';
 
+const API_BASE_URL = 'https://portfolio-gci2.onrender.com/api';
+
 const AdminUsers = () => {
   const { user } = useAuth();
   const { darkMode } = useTheme();
@@ -20,7 +22,7 @@ const AdminUsers = () => {
   const fetchUsers = async (page = 1) => {
     try {
       setLoading(true);
-      const response = await axios.get(`/api/admin/users?page=${page}&limit=10`);
+      const response = await axios.get(`${API_BASE_URL}/admin/users?page=${page}&limit=10`);
       const { data } = response.data;
       
       setUsers(data.users);
@@ -35,7 +37,7 @@ const AdminUsers = () => {
 
   const handleRoleChange = async (userId, newRole) => {
     try {
-      await axios.put(`/api/admin/users/${userId}/role`, { role: newRole });
+      await axios.put(`${API_BASE_URL}/admin/users/${userId}/role`, { role: newRole });
       
       // Update local state
       setUsers(users.map(user => 
@@ -51,7 +53,7 @@ const AdminUsers = () => {
     if (!window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
 
     try {
-      await axios.delete(`/api/admin/users/${userId}`);
+      await axios.delete(`${API_BASE_URL}/admin/users/${userId}`);
       setUsers(users.filter(user => user._id !== userId));
     } catch (error) {
       console.error('Delete user error:', error);

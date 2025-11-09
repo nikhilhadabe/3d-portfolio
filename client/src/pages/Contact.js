@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { FaTwitter, FaLinkedin, FaGithub, FaInstagram } from 'react-icons/fa';
 import { useTheme } from '../context/ThemeContext';
-import { useAlert } from '../context/AlertContext'; // ADD THIS IMPORT
+import { useAlert } from '../context/AlertContext';
 import axios from 'axios';
+
+const API_BASE_URL = 'https://portfolio-gci2.onrender.com/api';
 
 const Contact = () => {
   const { darkMode } = useTheme();
-  const { success, error, info } = useAlert(); // ADD THIS HOOK
+  const { success, error, info } = useAlert();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -27,17 +29,17 @@ const Contact = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('/api/contact', formData);
-      success(response.data.message); // USE ALERT CONTEXT
+      const response = await axios.post(`${API_BASE_URL}/contact`, formData);
+      success(response.data.message);
       setFormData({
         name: '',
         email: '',
         subject: '',
         message: ''
       });
-      info('Feel free to send another message anytime!'); // USE ALERT CONTEXT
+      info('Feel free to send another message anytime!');
     } catch (err) {
-      error(err.response?.data?.message || 'Failed to send message'); // USE ALERT CONTEXT
+      error(err.response?.data?.message || 'Failed to send message');
     } finally {
       setLoading(false);
     }
@@ -105,8 +107,6 @@ const Contact = () => {
           }`}>
             <h2 className="text-2xl font-bold mb-6">Send Message</h2>
             
-            {/* REMOVED LOCAL SUCCESS/ERROR STATES SINCE WE'RE USING ALERT CONTEXT */}
-
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>

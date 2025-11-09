@@ -3,6 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import axios from 'axios';
 
+const API_BASE_URL = 'https://portfolio-gci2.onrender.com/api';
+
 const SingleBlog = () => {
   const { slug } = useParams();
   const { darkMode } = useTheme();
@@ -17,7 +19,7 @@ const SingleBlog = () => {
   const fetchBlog = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`/api/blogs/${slug}`);
+      const response = await axios.get(`${API_BASE_URL}/blogs/${slug}`);
       setBlog(response.data.data);
     } catch (error) {
       console.error('Blog fetch error:', error);

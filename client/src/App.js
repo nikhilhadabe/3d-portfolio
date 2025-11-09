@@ -38,7 +38,7 @@ function App() {
     }
     setLoading(false);
 
-    document.title ="Nikhil Hadbe Portfolio"
+    document.title = "Nikhil Hadbe Portfolio"
   }, []);
 
   const toggleDarkMode = () => {

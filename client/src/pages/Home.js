@@ -4,6 +4,8 @@ import { useTheme } from '../context/ThemeContext';
 import Hero from '../components/Hero';
 import axios from 'axios';
 
+const API_BASE_URL = 'https://portfolio-gci2.onrender.com/api';
+
 const Home = () => {
   const { darkMode } = useTheme();
   const [stats, setStats] = useState({});
@@ -18,8 +20,8 @@ const Home = () => {
   const fetchHomeData = async () => {
     try {
       // Fetch featured projects
-      const projectsResponse = await axios.get('/api/projects?featured=true&limit=3');
-      const blogsResponse = await axios.get('/api/blogs?limit=3');
+      const projectsResponse = await axios.get(`${API_BASE_URL}/projects?featured=true&limit=3`);
+      const blogsResponse = await axios.get(`${API_BASE_URL}/blogs?limit=3`);
       
       setFeaturedProjects(projectsResponse.data.data.projects);
       setRecentBlogs(blogsResponse.data.data.blogs);

@@ -3,6 +3,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import axios from 'axios';
 
+const API_BASE_URL = 'https://portfolio-gci2.onrender.com/api';
+
 const AdminCourses = () => {
   const { user } = useAuth();
   const { darkMode } = useTheme();
@@ -20,7 +22,7 @@ const AdminCourses = () => {
 
   const fetchCourses = async () => {
     try {
-      const response = await axios.get('/api/courses?limit=1000');
+      const response = await axios.get(`${API_BASE_URL}/courses?limit=1000`);
       setCourses(response.data.data.courses);
     } catch (error) {
       console.error('Fetch courses error:', error);
@@ -34,7 +36,7 @@ const AdminCourses = () => {
     if (!window.confirm('Are you sure you want to delete this course?')) return;
 
     try {
-      await axios.delete(`/api/courses/${courseId}`);
+      await axios.delete(`${API_BASE_URL}/courses/${courseId}`);
       setCourses(courses.filter(course => course._id !== courseId));
     } catch (error) {
       console.error('Delete course error:', error);
@@ -51,10 +53,10 @@ const AdminCourses = () => {
     try {
       if (editingCourse) {
         // Update existing course
-        await axios.put(`/api/courses/${editingCourse._id}`, formData);
+        await axios.put(`${API_BASE_URL}/courses/${editingCourse._id}`, formData);
       } else {
         // Create new course
-        await axios.post('/api/courses', formData);
+        await axios.post(`${API_BASE_URL}/courses`, formData);
       }
       
       setShowForm(false);
@@ -223,8 +225,7 @@ const AdminCourses = () => {
   );
 };
 
-// Course Form Component
- // CourseForm Component - OPTIMIZED FOR LAPTOP
+// CourseForm Component - OPTIMIZED FOR LAPTOP
 const CourseForm = ({ course, onSubmit, onCancel, darkMode }) => {
   const [formData, setFormData] = useState({
     title: course?.title || '',

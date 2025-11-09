@@ -4,6 +4,8 @@ import { useTheme } from '../../context/ThemeContext';
 import { useAlert } from '../../context/AlertContext';
 import axios from 'axios';
 
+const API_BASE_URL = 'https://portfolio-gci2.onrender.com/api';
+
 const AdminBlogs = () => {
   const { user } = useAuth();
   const { darkMode } = useTheme();
@@ -16,23 +18,14 @@ const AdminBlogs = () => {
   useEffect(() => {
     if (user && user.role === 'admin') {
       fetchBlogs();
-    // info('Blog management loaded successfully');
     }
-  }, [user]); // ← ONLY 'user' IN DEPENDENCY ARRAY
-
-/*useEffect(() => {
-  if (user && user.role === 'admin') {
-    fetchBlogs();
-  }
-}, [user]); // ← ONLY 'user' IN DEPENDENCY ARRAY
-*/
-
+  }, [user]);
 
   const fetchBlogs = async () => {
     try {
-      const response = await axios.get('/api/blogs?limit=1000');
+      const response = await axios.get(`${API_BASE_URL}/blogs?limit=1000`);
       setBlogs(response.data.data.blogs);
-     success(`Loaded ${response.data.data.blogs.length} blogs`);
+      success(`Loaded ${response.data.data.blogs.length} blogs`);
     } catch (err) {
       error('Failed to load blogs');
     } finally {
@@ -45,7 +38,7 @@ const AdminBlogs = () => {
     if (!window.confirm(`Are you sure you want to delete "${blogTitle}"?`)) return;
 
     try {
-      await axios.delete(`/api/blogs/${blogId}`);
+      await axios.delete(`${API_BASE_URL}/blogs/${blogId}`);
       setBlogs(blogs.filter(blog => blog._id !== blogId));
       success(`Blog "${blogTitle}" deleted successfully`);
     } catch (err) {
@@ -56,16 +49,16 @@ const AdminBlogs = () => {
   const handleEdit = (blog) => {
     setEditingBlog(blog);
     setShowForm(true);
-     info(`Editing blog: ${blog.title}`);
+    info(`Editing blog: ${blog.title}`);
   };
 
   const handleFormSubmit = async (formData) => {
     try {
       if (editingBlog) {
-        await axios.put(`/api/blogs/${editingBlog._id}`, formData);
+        await axios.put(`${API_BASE_URL}/blogs/${editingBlog._id}`, formData);
         success(`Blog "${formData.title}" updated successfully`);
       } else {
-        await axios.post('/api/blogs', formData);
+        await axios.post(`${API_BASE_URL}/blogs`, formData);
         success(`Blog "${formData.title}" created successfully`);
       }
       
@@ -221,7 +214,6 @@ const AdminBlogs = () => {
   );
 };
 
-// BlogForm Component
 // BlogForm Component - OPTIMIZED FOR LAPTOP
 const BlogForm = ({ blog, onSubmit, onCancel, darkMode }) => {
   const [formData, setFormData] = useState({
@@ -397,7 +389,5 @@ const BlogForm = ({ blog, onSubmit, onCancel, darkMode }) => {
     </div>
   );
 };
-
-
 
 export default AdminBlogs;

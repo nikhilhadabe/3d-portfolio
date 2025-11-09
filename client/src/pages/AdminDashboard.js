@@ -4,6 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import axios from 'axios';
 
+const API_BASE_URL = 'https://portfolio-gci2.onrender.com/api';
+
 const AdminDashboard = () => {
   const { user } = useAuth();
   const { darkMode } = useTheme();
@@ -23,7 +25,7 @@ const AdminDashboard = () => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/admin/dashboard');
+      const response = await axios.get(`${API_BASE_URL}/admin/dashboard`);
       const { data } = response.data;
       
       setStats(data.stats);
