@@ -1,10 +1,4 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
-import path from 'path';
+npm
 import { fileURLToPath } from 'url';
 import adminRoutes from './routes/admin.js';
 import blogRoutes from './routes/blogs.js';
@@ -24,9 +18,20 @@ const __dirname = path.dirname(__filename);
 
 // Security Middleware
 app.use(helmet());
-app.use(cors({
+/*app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:3000',
   //credentials: true
+}));
+*/
+// With this:
+app.use(cors({
+  origin: [
+    'https://nikhilhadbe.netlify.app',
+    'http://localhost:3000',
+    'http://localhost:3001'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: false
 }));
 
 // Rate Limiting
