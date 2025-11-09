@@ -67,7 +67,11 @@ const connectDB = async () => {
   }
 };
 
-
+// Debug route loading - ADD THIS RIGHT HERE
+console.log('🔍 Loading routes...');
+console.log('Auth routes type:', typeof authRoutes);
+console.log('Project routes type:', typeof projectRoutes);
+console.log('Blog routes type:', typeof blogRoutes);
 
 
 
