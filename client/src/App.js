@@ -55,43 +55,44 @@ function App() {
     );
   }
 
-  return (
+ return (
+  <AuthProvider>
     <AlertProvider>
-      <AuthProvider>
-        <ThemeContextProvider>
-          <Router>
-            <div className={`min-h-screen transition-colors duration-300 ${
-              darkMode ? 'dark bg-gray-900 text-white' : 'bg-white text-gray-900'
-            }`}>
-              <Navbar />
-              <main>
-                <Routes>
-                  {/* Public Routes */}
-                  <Route path="/" element={<Home />} />
-                  <Route path="/blog" element={<Blog />} />
-                  <Route path="/blog/:slug" element={<SingleBlog />} />
-                  <Route path="/projects" element={<Projects />} />
-                  <Route path="/courses" element={<Courses />} />
-                  <Route path="/services" element={<Services />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/signup" element={<Signup />} />
+      <ThemeContextProvider>
+        <Router>
+          <div className={`min-h-screen transition-colors duration-300 ${
+            darkMode ? 'dark bg-gray-900 text-white' : 'bg-white text-gray-900'
+          }`}>
+            <Navbar />
+            <main>
+              <Routes>
+                {/* Public Routes */}
+                <Route path="/" element={<Home />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:slug" element={<SingleBlog />} />
+                <Route path="/projects" element={<Projects />} />
+                <Route path="/courses" element={<Courses />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
 
-                  {/* Admin Routes */}
-                  <Route path="/admin" element={<AdminDashboard />} />
-                  <Route path="/admin/blogs" element={<AdminBlogs />} />
-                  <Route path="/admin/projects" element={<AdminProjects />} />
-                  <Route path="/admin/courses" element={<AdminCourses />} />
-                  <Route path="/admin/users" element={<AdminUsers />} />
-                </Routes>
-              </main>
-              <Footer />
-            </div>
-          </Router>
-        </ThemeContextProvider>
-      </AuthProvider>
+                {/* Admin Routes */}
+                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/admin/blogs" element={<AdminBlogs />} />
+                <Route path="/admin/projects" element={<AdminProjects />} />
+                <Route path="/admin/courses" element={<AdminCourses />} />
+                <Route path="/admin/users" element={<AdminUsers />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        </Router>
+      </ThemeContextProvider>
     </AlertProvider>
-  );
+  </AuthProvider>
+);
+
 }
 
 export default App;
