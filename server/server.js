@@ -12,6 +12,7 @@ import blogRoutes from './routes/blogs.js';
 import projectRoutes from './routes/projects.js';
 import courseRoutes from './routes/courses.js';
 import contactRoutes from './routes/contact.js';
+import authRoutes from './routes/auth.js';
 
 
 // Load env vars
@@ -66,7 +67,7 @@ const connectDB = async () => {
   }
 };
 
-import authRoutes from './routes/auth.js';
+
 
 
 
