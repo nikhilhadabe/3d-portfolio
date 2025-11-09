@@ -1,4 +1,4 @@
-npm
+
 import { fileURLToPath } from 'url';
 import adminRoutes from './routes/admin.js';
 import blogRoutes from './routes/blogs.js';
