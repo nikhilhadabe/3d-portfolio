@@ -22,6 +22,11 @@ import AdminProjects from './pages/admin/AdminProjects';
 import AdminCourses from './pages/admin/AdminCourses';
 import AdminUsers from './pages/admin/AdminUsers';
 
+//google auth compnent
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import VerifyEmail from './pages/VerifyEmail';
+
 // Context
 import { ThemeContextProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
@@ -76,6 +81,9 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password/:token" element={<ResetPassword />} />
+                <Route path="/verify-email/:token" element={<VerifyEmail />} />
 
                 {/* Admin Routes */}
                 <Route path="/admin" element={<AdminDashboard />} />

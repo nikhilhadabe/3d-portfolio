@@ -226,6 +226,7 @@ const AdminProjects = () => {
 const ProjectForm = ({ project, onSubmit, onCancel, darkMode }) => {
   const [formData, setFormData] = useState({
     title: project?.title || '',
+    description: project?.description || '',
     shortDescription: project?.shortDescription || '',
     technologies: project?.technologies?.join(', ') || '',
     category: project?.category || 'web',
@@ -294,7 +295,7 @@ const ProjectForm = ({ project, onSubmit, onCancel, darkMode }) => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium mb-1">Description *</label>
+            <label className="block text-xs font-medium mb-1">Short Description *</label>
             <input
               type="text"
               name="shortDescription"
@@ -308,6 +309,23 @@ const ProjectForm = ({ project, onSubmit, onCancel, darkMode }) => {
               }`}
               placeholder="Brief description"
               maxLength="150"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium mb-1">Full Description *</label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              required
+              rows="3"
+              className={`w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors duration-300 ${
+                darkMode 
+                  ? 'bg-gray-700 border-gray-600 text-white' 
+                  : 'bg-white border-gray-300 text-gray-900'
+              }`}
+              placeholder="Full project description..."
             />
           </div>
 

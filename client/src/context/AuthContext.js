@@ -1,6 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-import { useAlert } from './AlertContext';
 
 const AuthContext = createContext();
 const API_BASE_URL = 'https://portfolio-gci2.onrender.com/api';
@@ -17,7 +16,12 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loginAttempts, setLoginAttempts] = useState(0);
-  const { success, error } = useAlert();
+  const [alert, setAlert] = useState({ show: false, message: '', type: '' });
+
+  const showAlert = (message, type = 'success') => {
+    setAlert({ show: true, message, type });
+    setTimeout(() => setAlert({ show: false, message: '', type: '' }), 5000);
+  };
 
   // Check if user is logged in on app start
   useEffect(() => {
@@ -31,7 +35,7 @@ export const AuthProvider = ({ children }) => {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         const response = await axios.get(`${API_BASE_URL}/auth/profile`);
         setUser(response.data);
-        success(`Welcome back, ${response.data.name}!`);
+        showAlert(`Welcome back, ${response.data.name}!`, 'success');
       }
     } catch (err) {
       localStorage.removeItem('token');
@@ -50,27 +54,25 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('token', response.data.token);
         axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
         setUser(response.data);
-        success('Account created successfully! Welcome! 🎉');
+        showAlert('Account created successfully! Welcome! 🎉', 'success');
       }
       
       return response.data;
     } catch (err) {
       const message = err.response?.data?.message || 'Registration failed';
-      error(message);
+      showAlert(message, 'error');
       throw new Error(message);
     }
   };
 
-  // Login user - UPDATED WITH RATE LIMITING PROTECTION
+  // Login user
   const login = async (email, password) => {
     try {
-      // Prevent too many rapid attempts
       if (loginAttempts >= 3) {
-        error('Too many login attempts. Please wait 30 seconds and try again.');
+        showAlert('Too many login attempts. Please wait 30 seconds and try again.', 'error');
         throw new Error('Rate limit exceeded');
       }
 
-      // Add delay to prevent rapid requests (1 second minimum)
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       const response = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
@@ -79,25 +81,23 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('token', response.data.token);
         axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
         setUser(response.data);
-        setLoginAttempts(0); // Reset attempts on successful login
-        success(`Welcome back, ${response.data.name}! 👋`);
+        setLoginAttempts(0);
+        showAlert(`Welcome back, ${response.data.name}! 👋`, 'success');
       }
       
       return response.data;
     } catch (err) {
-      // Handle rate limiting specifically
       if (err.response?.status === 429) {
         const retryAfter = err.response.headers['retry-after'] || 30;
-        error(`Too many login attempts. Please wait ${retryAfter} seconds before trying again.`);
+        showAlert(`Too many login attempts. Please wait ${retryAfter} seconds before trying again.`, 'error');
         setLoginAttempts(prev => prev + 1);
         
-        // Auto-reset attempts after 3 seconds
         setTimeout(() => {
           setLoginAttempts(0);
         }, 3000);
       } else {
         const message = err.response?.data?.message || 'Login failed';
-        error(message);
+        showAlert(message, 'error');
         setLoginAttempts(prev => prev + 1);
       }
       throw new Error(err.response?.data?.message || 'Login failed');
@@ -109,8 +109,8 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('token');
     delete axios.defaults.headers.common['Authorization'];
     setUser(null);
-    setLoginAttempts(0); // Reset attempts on logout
-    success('You have been logged out successfully. See you soon! 👋');
+    setLoginAttempts(0);
+    showAlert('You have been logged out successfully. See you soon! 👋', 'success');
   };
 
   // Update user profile
@@ -118,11 +118,11 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.put(`${API_BASE_URL}/auth/profile`, userData);
       setUser(response.data);
-      success('Profile updated successfully! ✅');
+      showAlert('Profile updated successfully! ✅', 'success');
       return response.data;
     } catch (err) {
       const message = err.response?.data?.message || 'Profile update failed';
-      error(message);
+      showAlert(message, 'error');
       throw new Error(message);
     }
   };
@@ -133,12 +133,25 @@ export const AuthProvider = ({ children }) => {
     register,
     login,
     logout,
-    updateProfile
+    updateProfile,
+    alert
   };
 
   return (
     <AuthContext.Provider value={value}>
       {children}
+      {alert.show && (
+        <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg border-l-4 ${
+          alert.type === 'success' 
+            ? 'bg-green-50 border-green-500 text-green-800'
+            : 'bg-red-50 border-red-500 text-red-800'
+        }`}>
+          <div className="flex items-center space-x-3">
+            <span className="text-xl">{alert.type === 'success' ? '✅' : '❌'}</span>
+            <span className="font-medium">{alert.message}</span>
+          </div>
+        </div>
+      )}
     </AuthContext.Provider>
   );
 };

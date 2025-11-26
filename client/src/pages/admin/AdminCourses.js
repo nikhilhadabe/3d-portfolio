@@ -324,6 +324,23 @@ const CourseForm = ({ course, onSubmit, onCancel, darkMode }) => {
             />
           </div>
 
+          <div>
+            <label className="block text-sm font-medium mb-1">Full Description *</label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              required
+              rows="4"
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 ${
+                darkMode 
+                  ? 'bg-gray-700 border-gray-600 text-white' 
+                  : 'bg-white border-gray-300 text-gray-900'
+              }`}
+              placeholder="Full course description..."
+            />
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
               <label className="block text-sm font-medium mb-1">Category *</label>

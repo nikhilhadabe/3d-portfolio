@@ -238,6 +238,11 @@ const BlogForm = ({ blog, onSubmit, onCancel, darkMode }) => {
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag)
       };
 
+      // Ensure categories array is not empty
+      if (submitData.categories.length === 0) {
+        submitData.categories = ['General'];
+      }
+
       await onSubmit(submitData);
     } catch (error) {
       console.error('Form submission error:', error);
@@ -299,6 +304,23 @@ const BlogForm = ({ blog, onSubmit, onCancel, darkMode }) => {
                   : 'bg-white border-gray-300 text-gray-900'
               }`}
               placeholder="Brief description"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Content *</label>
+            <textarea
+              name="content"
+              value={formData.content}
+              onChange={handleChange}
+              required
+              rows="6"
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 ${
+                darkMode 
+                  ? 'bg-gray-700 border-gray-600 text-white' 
+                  : 'bg-white border-gray-300 text-gray-900'
+              }`}
+              placeholder="Write your blog content here..."
             />
           </div>
 
