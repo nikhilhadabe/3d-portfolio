@@ -1,5 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import User from '../models/User.js';
 import { protect } from '../middleware/auth.js';
 
@@ -11,6 +12,42 @@ const generateToken = (id) => {
     expiresIn: process.env.JWT_EXPIRE || '30d',
   });
 };
+
+// ======= ADD THESE ROUTES RIGHT HERE =======
+// @desc    Test route
+// @route   GET /api/auth/test
+// @access  Public
+router.get('/test', (req, res) => {
+  res.json({ message: 'Auth routes working!' });
+});
+
+// @desc    Forgot password
+// @route   POST /api/auth/forgot-password
+// @access  Public
+
+/*router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    if (!email) {
+      return res.status(400).json({ message: 'Please provide email' });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'No user found with this email' });
+    }
+
+    res.json({ 
+      message: 'Password reset email would be sent',
+      email: email 
+    });
+
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});*/
 
 // @desc    Register user
 // @route   POST /api/auth/register

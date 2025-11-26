@@ -36,11 +36,22 @@ const userSchema = new mongoose.Schema({
   isVerified: {
     type: Boolean,
     default: false
+  },
+  // ADD THE NEW FIELDS HERE (before the closing brace)
+  resetPasswordToken: String,
+  resetPasswordExpire: Date,
+  verificationToken: String,
+  googleId: String,
+  loginMethod: {
+    type: String,
+    enum: ['local', 'google'],
+    default: 'local'
   }
 }, {
   timestamps: true
 });
 
+// Rest of your existing code remains the same...
 // Encrypt password before saving
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) {

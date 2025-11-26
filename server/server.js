@@ -13,6 +13,9 @@ import projectRoutes from './routes/projects.js';
 import courseRoutes from './routes/courses.js';
 import contactRoutes from './routes/contact.js';
 import authRoutes from './routes/auth.js';
+import authEnhancedRoutes from './routes/auth-enhanced.js';
+import googleAuthRoutes from './routes/google-auth.js';
+
 
 
 // Load env vars
@@ -80,6 +83,8 @@ app.use('/api/contact', contactRoutes);
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/auth', authEnhancedRoutes);
+app.use('/api/auth', googleAuthRoutes);
 
 // Admin Routes
 app.use('/api/admin', adminRoutes);
