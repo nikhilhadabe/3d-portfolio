@@ -59,6 +59,25 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 // Static Files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// ADD ROOT ROUTE HERE
+app.get('/', (req, res) => {
+  res.json({ 
+    message: '🚀 Portfolio Backend API is Running!',
+    version: '1.0.0',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV,
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      blogs: '/api/blogs', 
+      projects: '/api/projects',
+      courses: '/api/courses',
+      contact: '/api/contact',
+      admin: '/api/admin'
+    }
+  });
+});
+
 // Database Connection
 const connectDB = async () => {
   try {
