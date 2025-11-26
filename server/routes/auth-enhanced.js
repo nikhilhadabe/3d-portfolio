@@ -7,6 +7,7 @@ import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
+/*
 // Email transporter
 const transporter = nodemailer.createTransport({
   service: process.env.EMAIL_SERVICE || 'gmail',
@@ -14,6 +15,29 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USERNAME,
     pass: process.env.EMAIL_PASSWORD,
   },
+});*/
+
+// Email transporter with proper Gmail settings
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // Use TLS
+  auth: {
+    user: process.env.EMAIL_USERNAME,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+  tls: {
+    rejectUnauthorized: false
+  }
+});
+
+// Test connection on startup
+transporter.verify(function(error, success) {
+  if (error) {
+    console.log('❌ Email transporter error:', error);
+  } else {
+    console.log('✅ Email server is ready to send messages');
+  }
 });
 
 // Generate JWT Token (same as your existing)
@@ -22,7 +46,7 @@ const generateToken = (id) => {
     expiresIn: process.env.JWT_EXPIRE || '30d',
   });
 };
-
+/* working but not working
 // @desc    Forgot password - NEW
 // @route   POST /api/auth/forgot-password
 router.post('/forgot-password', async (req, res) => {
@@ -112,6 +136,46 @@ router.put('/reset-password/:token', async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error resetting password'
+    });
+  }
+});
+*/
+
+
+// @desc    Forgot password - NEW
+// @route   POST /api/auth/forgot-password
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'No account found with this email' 
+      });
+    }
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(20).toString('hex');
+    user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    user.resetPasswordExpire = Date.now() + 60 * 60 * 1000; // 1 hour
+    await user.save();
+
+    // TEMPORARILY DISABLE EMAIL - JUST RETURN SUCCESS
+    console.log('✅ Password reset token generated (email disabled):', resetToken);
+    
+    res.json({
+      success: true,
+      message: 'Password reset process initiated successfully',
+      debug: 'Email functionality temporarily disabled'
+    });
+
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error in password reset process'
     });
   }
 });
