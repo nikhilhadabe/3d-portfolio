@@ -25,7 +25,8 @@ router.get('/test', (req, res) => {
 // @route   POST /api/auth/forgot-password
 // @access  Public
 
-/*router.post('/forgot-password', async (req, res) => {
+/*
+router.post('/forgot-password', async (req, res) => {
   try {
     const { email } = req.body;
     
@@ -47,7 +48,8 @@ router.get('/test', (req, res) => {
     console.error('Forgot password error:', error);
     res.status(500).json({ message: 'Server error' });
   }
-});*/
+});
+*/
 
 // @desc    Register user
 // @route   POST /api/auth/register
