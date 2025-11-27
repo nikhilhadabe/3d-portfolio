@@ -29,32 +29,38 @@ router.post('/', async (req, res) => {
       message
     });
 
-    // Send email notification (optional - configure in .env)
-    if (process.env.EMAIL_USERNAME && process.env.EMAIL_PASSWORD) {
-      const transporter = nodemailer.createTransport({
-        service: process.env.EMAIL_SERVICE,
-        auth: {
-          user: process.env.EMAIL_USERNAME,
-          pass: process.env.EMAIL_PASSWORD,
-        },
-      });
+  // Send email notification (optional - configure in .env)
+if (process.env.EMAIL_USERNAME && process.env.EMAIL_PASSWORD) {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: process.env.EMAIL_SERVICE,
+      auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
 
-      const mailOptions = {
-        from: email,
-        to: process.env.EMAIL_USERNAME,
-        subject: `New Contact Form: ${subject}`,
-        html: `
-          <h3>New Contact Form Submission</h3>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Subject:</strong> ${subject}</p>
-          <p><strong>Message:</strong></p>
-          <p>${message}</p>
-        `,
-      };
+    const mailOptions = {
+      from: email,
+      to: process.env.EMAIL_USERNAME,
+      subject: `New Contact Form: ${subject}`,
+      html: `
+        <h3>New Contact Form Submission</h3>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Subject:</strong> ${subject}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
+      `,
+    };
 
-      await transporter.sendMail(mailOptions);
-    }
+    await transporter.sendMail(mailOptions);
+  } catch (emailError) {
+    console.error('Email sending failed:', emailError);
+    // Continue - don't fail the contact form
+  }
+}
+
 
     res.status(201).json({
       success: true,
